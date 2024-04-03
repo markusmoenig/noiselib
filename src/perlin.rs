@@ -106,18 +106,18 @@ fn grad3(ix: i32, iy: i32, iz: i32, fx: f32, fy: f32, fz: f32) -> f32 {
 }
 
 pub fn perlin_noise_3d(x: f32, y: f32, z: f32, mut seed: u32) -> f32 {
-    let ix = x.floor() as i32;
-    let iy = y.floor() as i32;
-    let iz = z.floor() as i32;
+    let ix = x.floor() as u32;
+    let iy = y.floor() as u32;
+    let iz = z.floor() as u32;
 
     let fx = x - ix as f32;
     let fy = y - iy as f32;
     let fz = z - iz as f32;
 
     seed &= N_PERM - 1;
-    let ix = (ix as u32 + NOISE_PERM[seed as usize]) & (N_PERM - 1);
-    let iy = (iy as u32 + NOISE_PERM[seed as usize + 1]) & (N_PERM - 1);
-    let iz = (iz as u32 + NOISE_PERM[seed as usize + 2]) & (N_PERM - 1);
+    let ix = (ix + NOISE_PERM[seed as usize]) & (N_PERM - 1);
+    let iy = (iy + NOISE_PERM[seed as usize + 1]) & (N_PERM - 1);
+    let iz = (iz + NOISE_PERM[seed as usize + 2]) & (N_PERM - 1);
 
     let wz = smooth_func(fz);
 
@@ -163,4 +163,91 @@ pub fn perlin_noise_3d(x: f32, y: f32, z: f32, mut seed: u32) -> f32 {
 
     (1.0 - wx) * ((1.0 - wy) * (w000 + w001) + wy * (w010 + w011))
         + wx * ((1.0 - wy) * (w100 + w101) + wy * (w110 + w111))
+}
+
+#[allow(clippy::too_many_arguments)]
+#[inline(always)]
+fn grad4(ix: i32, iy: i32, iz: i32, it: i32, fx: f32, fy: f32, fz: f32, ft: f32) -> f32 {
+    let h = NOISE_PERM[NOISE_PERM
+        [NOISE_PERM[NOISE_PERM[ix as usize] as usize + iy as usize] as usize + iz as usize]
+        as usize
+        + it as usize];
+    let mut sum = 0.0;
+
+    if h & 1 != 0 {
+        sum += if h & 2 != 0 { fx } else { -fx };
+    }
+    if h & 4 != 0 {
+        sum += if h & 8 != 0 { fy } else { -fy };
+    }
+    if h & 16 != 0 {
+        sum += if h & 32 != 0 { fz } else { -fz };
+    }
+    if h & 64 != 0 {
+        sum += if h & 128 != 0 { ft } else { -ft };
+    }
+
+    sum
+}
+
+pub fn perlin_noise_4d(x: f32, y: f32, z: f32, t: f32, mut seed: u32) -> f32 {
+    let mut ix = x.floor() as i32;
+    let mut iy = y.floor() as i32;
+    let mut iz = z.floor() as i32;
+    let mut it = t.floor() as i32;
+
+    let fx = x - ix as f32;
+    let fy = y - iy as f32;
+    let fz = z - iz as f32;
+    let ft = t - it as f32;
+
+    seed &= N_PERM - 1;
+    ix += NOISE_PERM[seed as usize] as i32;
+    iy += NOISE_PERM[seed as usize + 1] as i32;
+    iz += NOISE_PERM[seed as usize + 2] as i32;
+    it += NOISE_PERM[seed as usize + 3] as i32;
+
+    ix &= (N_PERM - 1) as i32;
+    iy &= (N_PERM - 1) as i32;
+    iz &= (N_PERM - 1) as i32;
+    it &= (N_PERM - 1) as i32;
+
+    let wt = smooth_func(ft);
+
+    let w0000 = grad4(ix, iy, iz, it, fx, fy, fz, ft) * (1.0 - wt);
+    let w0001 = grad4(ix, iy, iz, it + 1, fx, fy, fz, ft - 1.0) * wt;
+    let w0010 = grad4(ix, iy, iz + 1, it, fx, fy, fz - 1.0, ft) * (1.0 - wt);
+    let w0011 = grad4(ix, iy, iz + 1, it + 1, fx, fy, fz - 1.0, ft - 1.0) * wt;
+    let w0100 = grad4(ix, iy + 1, iz, it, fx, fy - 1.0, fz, ft) * (1.0 - wt);
+    let w0101 = grad4(ix, iy + 1, iz, it + 1, fx, fy - 1.0, fz, ft - 1.0) * wt;
+    let w0110 = grad4(ix, iy + 1, iz + 1, it, fx, fy - 1.0, fz - 1.0, ft) * (1.0 - wt);
+    let w0111 = grad4(ix, iy + 1, iz + 1, it + 1, fx, fy - 1.0, fz - 1.0, ft - 1.0) * wt;
+
+    let w1000 = grad4(ix + 1, iy, iz, it, fx - 1.0, fy, fz, ft) * (1.0 - wt);
+    let w1001 = grad4(ix + 1, iy, iz, it + 1, fx - 1.0, fy, fz, ft - 1.0) * wt;
+    let w1010 = grad4(ix + 1, iy, iz + 1, it, fx - 1.0, fy, fz - 1.0, ft) * (1.0 - wt);
+    let w1011 = grad4(ix + 1, iy, iz + 1, it + 1, fx - 1.0, fy, fz - 1.0, ft - 1.0) * wt;
+    let w1100 = grad4(ix + 1, iy + 1, iz, it, fx - 1.0, fy - 1.0, fz, ft) * (1.0 - wt);
+    let w1101 = grad4(ix + 1, iy + 1, iz, it + 1, fx - 1.0, fy - 1.0, fz, ft - 1.0) * wt;
+    let w1110 = grad4(ix + 1, iy + 1, iz + 1, it, fx - 1.0, fy - 1.0, fz - 1.0, ft) * (1.0 - wt);
+    let w1111 = grad4(
+        ix + 1,
+        iy + 1,
+        iz + 1,
+        it + 1,
+        fx - 1.0,
+        fy - 1.0,
+        fz - 1.0,
+        ft - 1.0,
+    ) * wt;
+
+    let wx = smooth_func(fx);
+    let wy = smooth_func(fy);
+    let wz = smooth_func(fz);
+
+    (1.0 - wx)
+        * ((1.0 - wy) * ((1.0 - wz) * (w0000 + w0001) + wz * (w0010 + w0011))
+            + wy * ((1.0 - wz) * (w0100 + w0101) + wz * (w0110 + w0111)))
+        + wx * ((1.0 - wy) * ((1.0 - wz) * (w1000 + w1001) + wz * (w1010 + w1011))
+            + wy * ((1.0 - wz) * (w1100 + w1101) + wz * (w1110 + w1111)))
 }
