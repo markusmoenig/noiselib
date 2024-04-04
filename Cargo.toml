@@ -1,9 +1,9 @@
 [package]
 name = "noiselib"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 authors = ["Markus Moenig"]
-description = "A noise library for a collection of 1D, 2D, 3D, 4D noise and fractal functions."
+description = "A library of procedural 1D, 2D, 3D and 4D noise and fractal functions."
 license = "MIT"
 repository = "https://github.com/markusmoenig/noiselib.git"
 keywords = ["noise", "procedural", "perlin", "fractal", "library"]
