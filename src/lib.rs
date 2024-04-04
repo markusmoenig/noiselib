@@ -113,7 +113,63 @@ mod tests {
             .expect("Failed to save image");
     }
     #[test]
-    fn generate_fractal_image() {
+    fn generate_fractal_add_image() {
+        let octaves = 4;
+        let freq_falloff = 0.5;
+        let lacunarity = 2.0;
+        let seed = 1;
+        let mut rng = UniformRandomGen::new(seed);
+
+        let width = 256;
+        let height = 256;
+        let img = ImageBuffer::from_fn(width, height, |x, y| {
+            let noise_val = fractal_noise_add_2d(
+                &mut rng,
+                x as f32 / width as f32 * 10.0,
+                y as f32 / height as f32 * 10.0,
+                musgrave_noise_2d,
+                octaves,
+                freq_falloff,
+                lacunarity,
+                seed,
+            );
+            let normalized_val = ((noise_val + 1.0) / 2.0 * 255.0) as u8;
+            Luma([normalized_val])
+        });
+
+        img.save("images/fractal_add.png")
+            .expect("Failed to save image");
+    }
+    #[test]
+    fn generate_fractal_add_abs_image() {
+        let octaves = 4;
+        let freq_falloff = 0.5;
+        let lacunarity = 2.0;
+        let seed = 1;
+        let mut rng = UniformRandomGen::new(seed);
+
+        let width = 256;
+        let height = 256;
+        let img = ImageBuffer::from_fn(width, height, |x, y| {
+            let noise_val = fractal_noise_add_abs_2d(
+                &mut rng,
+                x as f32 / width as f32 * 10.0,
+                y as f32 / height as f32 * 10.0,
+                musgrave_noise_2d,
+                octaves,
+                freq_falloff,
+                lacunarity,
+                seed,
+            );
+            let normalized_val = ((noise_val + 1.0) / 2.0 * 255.0) as u8;
+            Luma([normalized_val])
+        });
+
+        img.save("images/fractal_addabs.png")
+            .expect("Failed to save image");
+    }
+    #[test]
+    fn generate_fractal_mul_image() {
         let octaves = 4;
         let freq_falloff = 0.5;
         let lacunarity = 2.0;

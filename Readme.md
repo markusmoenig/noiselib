@@ -108,6 +108,114 @@ pub fn simplex_noise_4d(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, t: f
 
 ## Fractal functions
 
+### Fractal Add
+
+![Add](images/fractal_add.png)
+
+The image uses musgrave noise.
+
+```rust
+pub fn fractal_noise_add_1d<F: Fn(&mut UniformRandomGen, f32, u32) -> f32>(
+    rng: &mut UniformRandomGen,
+    x: f32,
+    noise_func: F,
+    octaves: i32,
+    freq_falloff: f32,
+    lacunarity: f32,
+    seed: u32,
+) -> f32
+
+pub fn fractal_noise_add_2d<F: Fn(&mut UniformRandomGen, f32, f32, u32) -> f32>(
+    rng: &mut UniformRandomGen,
+    x: f32,
+    y: f32,
+    noise_func: F,
+    octaves: i32,
+    freq_falloff: f32,
+    lacunarity: f32,
+    seed: u32,
+) -> f32;
+
+pub fn fractal_noise_add_3d<F: Fn(&mut UniformRandomGen, f32, f32, f32, u32) -> f32>(
+    rng: &mut UniformRandomGen,
+    x: f32,
+    y: f32,
+    z: f32,
+    noise_func: F,
+    octaves: i32,
+    freq_falloff: f32,
+    lacunarity: f32,
+    seed: u32,
+) -> f32;
+
+pub fn fractal_noise_add_4d<F: Fn(&mut UniformRandomGen, f32, f32, f32, f32, u32) -> f32>(
+    rng: &mut UniformRandomGen,
+    x: f32,
+    y: f32,
+    z: f32,
+    t: f32,
+    noise_func: F,
+    octaves: i32,
+    freq_falloff: f32,
+    lacunarity: f32,
+    seed: u32,
+) -> f32;
+```
+
+### Fractal Add Abs
+
+![AddAbs](images/fractal_addabs.png)
+
+The image uses musgrave noise.
+
+```rust
+pub fn fractal_noise_add_abs_1d<F: Fn(&mut UniformRandomGen, f32, u32) -> f32>(
+    rng: &mut UniformRandomGen,
+    x: f32,
+    noise_func: F,
+    octaves: i32,
+    freq_falloff: f32,
+    lacunarity: f32,
+    seed: u32,
+) -> f32
+
+pub fn fractal_noise_add_abs_2d<F: Fn(&mut UniformRandomGen, f32, f32, u32) -> f32>(
+    rng: &mut UniformRandomGen,
+    x: f32,
+    y: f32,
+    noise_func: F,
+    octaves: i32,
+    freq_falloff: f32,
+    lacunarity: f32,
+    seed: u32,
+) -> f32;
+
+pub fn fractal_noise_add_abs_3d<F: Fn(&mut UniformRandomGen, f32, f32, f32, u32) -> f32>(
+    rng: &mut UniformRandomGen,
+    x: f32,
+    y: f32,
+    z: f32,
+    noise_func: F,
+    octaves: i32,
+    freq_falloff: f32,
+    lacunarity: f32,
+    seed: u32,
+) -> f32;
+
+pub fn fractal_noise_add_abs_4d<F: Fn(&mut UniformRandomGen, f32, f32, f32, f32, u32) -> f32>(
+    rng: &mut UniformRandomGen,
+    x: f32,
+    y: f32,
+    z: f32,
+    t: f32,
+    noise_func: F,
+    octaves: i32,
+    freq_falloff: f32,
+    lacunarity: f32,
+    seed: u32,
+) -> f32;
+```
+
 ### Fractal Mul
 
 ![Multiplied](images/fractal_mul.png)
