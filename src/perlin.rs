@@ -139,7 +139,7 @@ pub fn perlin_noise_3d(_rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, mut 
 
 #[allow(clippy::too_many_arguments)]
 #[inline(always)]
-fn grad4(ix: i32, iy: i32, iz: i32, it: i32, fx: f32, fy: f32, fz: f32, ft: f32) -> f32 {
+pub fn grad4(ix: i32, iy: i32, iz: i32, it: i32, fx: f32, fy: f32, fz: f32, ft: f32) -> f32 {
     let h = NOISE_PERM[NOISE_PERM
         [NOISE_PERM[NOISE_PERM[ix as usize] as usize + iy as usize] as usize + iz as usize]
         as usize

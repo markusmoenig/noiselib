@@ -110,7 +110,7 @@ pub fn simplex_noise_3d(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, seed
 
 ![Multiplied](images/fractal_mul.png)
 
-The image uses a Perlin noise.
+The image uses perlin noise.
 
 ```rust
 pub fn fractal_noise_mul_1d<F: Fn(&mut UniformRandomGen, f32, u32) -> f32>(
