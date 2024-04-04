@@ -105,7 +105,7 @@ fn grad3(ix: i32, iy: i32, iz: i32, fx: f32, fy: f32, fz: f32) -> f32 {
     ((h & 1) as i32 * 2 - 1) as f32 * u + ((h & 2) as i32 * 2 - 1) as f32 * v
 }
 
-pub fn perlin_noise_3d(x: f32, y: f32, z: f32, mut seed: u32) -> f32 {
+pub fn perlin_noise_3d(_rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, mut seed: u32) -> f32 {
     let ix = x.floor() as u32;
     let iy = y.floor() as u32;
     let iz = z.floor() as u32;
@@ -190,7 +190,14 @@ fn grad4(ix: i32, iy: i32, iz: i32, it: i32, fx: f32, fy: f32, fz: f32, ft: f32)
     sum
 }
 
-pub fn perlin_noise_4d(x: f32, y: f32, z: f32, t: f32, mut seed: u32) -> f32 {
+pub fn perlin_noise_4d(
+    _rng: &mut UniformRandomGen,
+    x: f32,
+    y: f32,
+    z: f32,
+    t: f32,
+    mut seed: u32,
+) -> f32 {
     let mut ix = x.floor() as i32;
     let mut iy = y.floor() as i32;
     let mut iz = z.floor() as i32;

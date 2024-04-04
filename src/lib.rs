@@ -1,10 +1,12 @@
 pub mod fractal;
+pub mod musgrave;
 pub mod perlin;
 pub mod random;
 pub mod uniform;
 
 pub mod prelude {
     pub use crate::fractal::*;
+    pub use crate::musgrave::*;
     pub use crate::perlin::*;
     pub use crate::random::*;
     pub use crate::uniform::UniformRandomGen;
@@ -65,6 +67,27 @@ mod tests {
         });
 
         img.save("images/perlin.png").expect("Failed to save image");
+    }
+    #[test]
+    fn generate_musgrave_image() {
+        let seed = 1;
+        let mut rng = UniformRandomGen::new(seed);
+
+        let width = 256;
+        let height = 256;
+        let img = ImageBuffer::from_fn(width, height, |x, y| {
+            let noise_val = musgrave_noise_2d(
+                &mut rng,
+                x as f32 / width as f32 * 10.0,
+                y as f32 / height as f32 * 10.0,
+                seed,
+            );
+            let normalized_val = ((noise_val + 1.0) / 2.0 * 255.0) as u8;
+            Luma([normalized_val])
+        });
+
+        img.save("images/musgrave.png")
+            .expect("Failed to save image");
     }
     #[test]
     fn generate_fractal_image() {
