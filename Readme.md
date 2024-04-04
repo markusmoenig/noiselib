@@ -96,7 +96,7 @@ pub fn musgrave_noise_4d(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, t: 
 
 ![Musgrave](images/simplex.png)
 
-````rust
+```rust
 pub fn simplex_noise_1d(rng: &mut UniformRandomGen, x: f32, seed: u32) -> f32;
 
 pub fn simplex_noise_2d(rng: &mut UniformRandomGen, x: f32, y: f32, seed: u32) -> f32;
@@ -160,4 +160,4 @@ pub fn fractal_noise_mul_4d<F: Fn(&mut UniformRandomGen, f32, f32, f32, f32, u32
     offset: f32,
     seed: u32,
 ) -> f32;
-````
+```
