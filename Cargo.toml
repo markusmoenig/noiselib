@@ -1,6 +1,6 @@
 [package]
 name = "noiselib"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Markus Moenig"]
 description = "A noise library for a collection of 1D, 2D, 3D, 4D noise and fractal functions."
