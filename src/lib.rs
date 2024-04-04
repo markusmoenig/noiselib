@@ -80,8 +80,8 @@ mod tests {
         let img = ImageBuffer::from_fn(width, height, |x, y| {
             let noise_val = musgrave_noise_2d(
                 &mut rng,
-                x as f32 / width as f32 * -10.0,
-                y as f32 / height as f32 * -10.0,
+                x as f32 / width as f32 * 10.0,
+                y as f32 / height as f32 * 10.0,
                 seed,
             );
             let normalized_val = ((noise_val + 1.0) / 2.0 * 255.0) as u8;

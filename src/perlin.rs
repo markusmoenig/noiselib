@@ -95,7 +95,7 @@ pub fn perlin_noise_2d(_rng: &mut UniformRandomGen, x: f32, y: f32, mut seed: u3
 }
 
 #[inline(always)]
-fn grad3(ix: i32, iy: i32, iz: i32, fx: f32, fy: f32, fz: f32) -> f32 {
+pub fn grad3(ix: i32, iy: i32, iz: i32, fx: f32, fy: f32, fz: f32) -> f32 {
     let h = NOISE_PERM
         [NOISE_PERM[NOISE_PERM[ix as usize] as usize + iy as usize] as usize + iz as usize]
         & 15;

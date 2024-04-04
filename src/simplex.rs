@@ -78,94 +78,120 @@ pub fn simplex_noise_2d(_rng: &mut UniformRandomGen, x: f32, y: f32, mut seed: u
     sum * 49.5
 }
 
-/*
 const F3: f32 = 1.0 / 3.0;
 const G3: f32 = 1.0 / 6.0;
 
-pub fn musgrave_noise_3d(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, seed: u32) -> f32 {
+pub fn simplex_noise_3d(_rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, mut seed: u32) -> f32 {
     let skew = (x + y + z) * F3;
-    let mut ix = (x + skew).floor() as u32;
-    let mut iy = RT_FLOOR(y + skew);
-    let mut iz = RT_FLOOR(z + skew);
+    let mut ix = (x + skew).floor() as i32;
+    let mut iy = (y + skew).floor() as i32;
+    let mut iz = (z + skew).floor() as i32;
 
-    ieeef unskew = (ix + iy + iz) * G3;
+    let unskew = (ix + iy + iz) as f32 * G3;
 
-    ieeef fx[4], fy[4], fz[4];
+    let mut fx: [f32; 4] = [0.0; 4];
+    let mut fy: [f32; 4] = [0.0; 4];
+    let mut fz: [f32; 4] = [0.0; 4];
 
-    fx[0] = x - (ix - unskew);
-    fy[0] = y - (iy - unskew);
-    fz[0] = z - (iz - unskew);
+    fx[0] = x - (ix as f32 - unskew);
+    fy[0] = y - (iy as f32 - unskew);
+    fz[0] = z - (iz as f32 - unskew);
 
-    int i[4], j[4], k[4];
-    i[0] = j[0] = k[0] = 0;
-    i[3] = j[3] = k[3] = 1;
+    let mut i: [i32; 4] = [0; 4];
+    let mut j: [i32; 4] = [0; 4];
+    let mut k: [i32; 4] = [0; 4];
 
-    if (fx[0] >= fy[0])
-    {
-        if (fy[0] >= fz[0])
-        {
-            i[1] = i[2] = j[2] = 1;
-            j[1] = k[1] = k[2] = 0;
+    i[0] = 0;
+    j[0] = 0;
+    k[0] = 0;
+    i[3] = 1;
+    j[3] = 1;
+    k[3] = 1;
+
+    if fx[0] >= fy[0] {
+        if fy[0] >= fz[0] {
+            i[1] = 1;
+            i[2] = 1;
+            j[2] = 1;
+            j[1] = 0;
+            k[1] = 0;
+            k[2] = 0;
+        } else if fx[0] >= fz[0] {
+            i[1] = 1;
+            i[2] = 1;
+            k[2] = 1;
+            j[1] = 0;
+            j[2] = 0;
+            k[1] = 0;
+        } else {
+            i[2] = 1;
+            k[1] = 1;
+            k[2] = 1;
+            i[1] = 0;
+            j[1] = 0;
+            j[2] = 0;
         }
-        else if (fx[0] >= fz[0])
-        {
-            i[1] = i[2] = k[2] = 1;
-            j[1] = j[2] = k[1] = 0;
-        }
-        else
-        {
-            i[2] = k[1] = k[2] = 1;
-            i[1] = j[1] = j[2] = 0;
-        }
+    } else if fy[0] < fz[0] {
+        j[2] = 1;
+        k[1] = 1;
+        k[2] = 1;
+        i[1] = 0;
+        i[2] = 0;
+        j[1] = 0;
+    } else if fx[0] < fz[0] {
+        j[1] = 1;
+        j[2] = 1;
+        k[2] = 1;
+        i[1] = 0;
+        i[2] = 0;
+        k[1] = 0;
+    } else {
+        i[2] = 1;
+        j[1] = 1;
+        j[2] = 1;
+        i[1] = 0;
+        k[1] = 0;
+        k[2] = 0;
     }
-    else
+
+    for idx in 1..4
+    //(int idx = 1; idx < 4; idx++)
     {
-        if (fy[0] < fz[0])
-        {
-            j[2] = k[1] = k[2] = 1;
-            i[1] = i[2] = j[1] = 0;
-        }
-        else if (fx[0] < fz[0])
-        {
-            j[1] = j[2] = k[2] = 1;
-            i[1] = i[2] = k[1] = 0;
-        }
-        else
-        {
-            i[2] = j[1] = j[2] = 1;
-            i[1] = k[1] = k[2] = 0;
-        }
+        fx[idx] = fx[0] - i[idx] as f32 + idx as f32 * G3;
+        fy[idx] = fy[0] - j[idx] as f32 + idx as f32 * G3;
+        fz[idx] = fz[0] - k[idx] as f32 + idx as f32 * G3;
     }
 
-    for (int idx = 1; idx < 4; idx++)
+    seed &= N_PERM as u32 - 1;
+    ix += NOISE_PERM[seed as usize];
+    iy += NOISE_PERM[seed as usize + 1];
+    iz += NOISE_PERM[seed as usize + 2];
+
+    ix &= N_PERM - 1;
+    iy &= N_PERM - 1;
+    iz &= N_PERM - 1;
+
+    let mut sum = 0.0;
+
+    for idx in 0..4
+    //(int idx = 0; idx < 4; idx++)
     {
-        fx[idx] = fx[0] - i[idx] + idx * G3;
-        fy[idx] = fy[0] - j[idx] + idx * G3;
-        fz[idx] = fz[0] - k[idx] + idx * G3;
-    }
+        let mut t = 0.6 - fx[idx] * fx[idx] - fy[idx] * fy[idx] - fz[idx] * fz[idx];
 
-    seed &= (N_PERM - 1);
-    ix += noise_perm[seed];
-    iy += noise_perm[seed + 1];
-    iz += noise_perm[seed + 2];
-
-    ix &= (N_PERM - 1);
-    iy &= (N_PERM - 1);
-    iz &= (N_PERM - 1);
-
-    ieeef sum = 0;
-
-    for (int idx = 0; idx < 4; idx++)
-    {
-        ieeef t = 0.6f - fx[idx] * fx[idx] - fy[idx] * fy[idx] - fz[idx] * fz[idx];
-
-        if (t > 0)
-        {
+        if t > 0.0 {
             t *= t;
-            sum += t * t * grad3(ix + i[idx], iy + j[idx], iz + k[idx], fx[idx], fy[idx], fz[idx]);
+            sum += t
+                * t
+                * grad3(
+                    ix + i[idx],
+                    iy + j[idx],
+                    iz + k[idx],
+                    fx[idx],
+                    fy[idx],
+                    fz[idx],
+                );
         }
     }
 
-    return sum * 32.5f;
+    sum * 32.5
 }
-*/

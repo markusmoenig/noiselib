@@ -100,6 +100,8 @@ pub fn musgrave_noise_4d(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, t: 
 pub fn simplex_noise_1d(rng: &mut UniformRandomGen, x: f32, seed: u32) -> f32;
 
 pub fn simplex_noise_2d(rng: &mut UniformRandomGen, x: f32, y: f32, seed: u32) -> f32;
+
+pub fn simplex_noise_3d(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, seed: u32) -> f32;
 ```
 
 ## Fractal functions
