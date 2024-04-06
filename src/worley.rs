@@ -61,7 +61,7 @@ pub fn worley_f1_add_points_3d(
         .wrapping_add(915488749u64.wrapping_mul(iy as u64))
         .wrapping_add(2120969693u64.wrapping_mul(iz as u64))
         .wrapping_add(seed as u64) as u32;
-    let n_points = 1;
+    let n_points = POISSON_COUNT[(rseed >> 24) as usize];
 
     for i in 0..n_points {
         let dx = rng.get(rseed + i as u32 * 16) + ix as f32 - x;
