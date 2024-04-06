@@ -1,8 +1,8 @@
 This is a collection of procedural, seeded noises. Useful for CPU based raytracers and as building blocks for procedural art and textures.
 
-The noises are optimized for speed. All noises are available in all 4 dimensions (1D, 2D, 3D, 4D) and return a value between -1.0 and 1.0.
+The noises are optimized for speed. Most noises are available in all 4 dimensions (1D, 2D, 3D, 4D), some are only available in specific dimensions (or are still under development).
 
-All noises have the same signature so that they can be passed as parameters to the supplied fractal functions.
+All noises have the same signature so that they can be passed as parameters to the supplied fractal functions. All return a value between -1.0 and 1.0.
 
 This library has no external dependencies.
 
@@ -106,170 +106,73 @@ pub fn simplex_noise_3d(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, seed
 pub fn simplex_noise_4d(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, t: f32, seed: u32) -> f32;
 ```
 
+### Worley F1
+
+![Musgrave](images/worley_f1.png)
+
+```rust
+pub fn worley_f1_noise_2d(rng: &mut UniformRandomGen, x: f32, y: f32, seed: u32) -> f32;
+```
+
 ## Fractal functions
 
 ### Fractal Add
 
-![Add](images/fractal_add.png)
+![PerlinAdd](images/fractal_add_perlin.png) Perlin
 
-The image uses musgrave noise.
+![MusgraveAdd](images/fractal_add_musgrave.png) Musgrave
+
+![SimplexAdd](images/fractal_add_simplex.png) Simplex
+
+![WorleyF1Add](images/fractal_add_worley_f1.png) Worley F1
+
 
 ```rust
-pub fn fractal_noise_add_1d<F: Fn(&mut UniformRandomGen, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    seed: u32,
-) -> f32
+pub fn fractal_noise_add_1d<F: Fn(&mut UniformRandomGen, f32, u32) -> f32>(rng: &mut UniformRandomGen, x: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, seed: u32) -> f32
 
-pub fn fractal_noise_add_2d<F: Fn(&mut UniformRandomGen, f32, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    y: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    seed: u32,
-) -> f32;
+pub fn fractal_noise_add_2d<F: Fn(&mut UniformRandomGen, f32, f32, u32) -> f32>(rng: &mut UniformRandomGen, x: f32, y: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, seed: u32) -> f32;
 
-pub fn fractal_noise_add_3d<F: Fn(&mut UniformRandomGen, f32, f32, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    y: f32,
-    z: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    seed: u32,
-) -> f32;
+pub fn fractal_noise_add_3d<F: Fn(&mut UniformRandomGen, f32, f32, f32, u32) -> f32>(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, seed: u32) -> f32;
 
-pub fn fractal_noise_add_4d<F: Fn(&mut UniformRandomGen, f32, f32, f32, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    y: f32,
-    z: f32,
-    t: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    seed: u32,
-) -> f32;
+pub fn fractal_noise_add_4d<F: Fn(&mut UniformRandomGen, f32, f32, f32, f32, u32) -> f32>(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, t: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, seed: u32) -> f32;
 ```
 
 ### Fractal Add Abs
 
-![AddAbs](images/fractal_addabs.png)
+![PerlinAddAbs](images/fractal_addabs_perlin.png)  Perlin
 
-The image uses musgrave noise.
+![MusgraveAddAbs](images/fractal_addabs_musgrave.png) Musgrave
+
+![SimplexAddAbs](images/fractal_addabs_simplex.png) Simplex
+
+![WorleyF1AddAbs](images/fractal_addabs_worley_f1.png) Worley F1
 
 ```rust
-pub fn fractal_noise_add_abs_1d<F: Fn(&mut UniformRandomGen, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    seed: u32,
-) -> f32
+pub fn fractal_noise_add_abs_1d<F: Fn(&mut UniformRandomGen, f32, u32) -> f32>(rng: &mut UniformRandomGen, x: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, seed: u32) -> f32
 
-pub fn fractal_noise_add_abs_2d<F: Fn(&mut UniformRandomGen, f32, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    y: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    seed: u32,
-) -> f32;
+pub fn fractal_noise_add_abs_2d<F: Fn(&mut UniformRandomGen, f32, f32, u32) -> f32>( rng: &mut UniformRandomGen, x: f32, y: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, seed: u32) -> f32;
 
-pub fn fractal_noise_add_abs_3d<F: Fn(&mut UniformRandomGen, f32, f32, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    y: f32,
-    z: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    seed: u32,
-) -> f32;
+pub fn fractal_noise_add_abs_3d<F: Fn(&mut UniformRandomGen, f32, f32, f32, u32) -> f32>(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, seed: u32) -> f32;
 
-pub fn fractal_noise_add_abs_4d<F: Fn(&mut UniformRandomGen, f32, f32, f32, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    y: f32,
-    z: f32,
-    t: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    seed: u32,
-) -> f32;
+pub fn fractal_noise_add_abs_4d<F: Fn(&mut UniformRandomGen, f32, f32, f32, f32, u32) -> f32>(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, t: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, seed: u32) -> f32;
 ```
 
 ### Fractal Mul
 
-![Multiplied](images/fractal_mul.png)
+![PerlinMul](images/fractal_mul_perlin.png) Perlin
 
-The image uses perlin noise.
+![MusgraveMul](images/fractal_mul_musgrave.png) Musgrave
+
+![SimplexMul](images/fractal_mul_simplex.png) Simplex
+
+![WorleyF1Mul](images/fractal_mul_worley_f1.png) Worley F1
 
 ```rust
-pub fn fractal_noise_mul_1d<F: Fn(&mut UniformRandomGen, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    offset: f32,
-    seed: u32,
-) -> f32
+pub fn fractal_noise_mul_1d<F: Fn(&mut UniformRandomGen, f32, u32) -> f32>( rng: &mut UniformRandomGen, x: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, offset: f32, seed: u32) -> f32
 
-pub fn fractal_noise_mul_2d<F: Fn(&mut UniformRandomGen, f32, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    y: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    offset: f32,
-    seed: u32,
-) -> f32;
+pub fn fractal_noise_mul_2d<F: Fn(&mut UniformRandomGen, f32, f32, u32) -> f32>(rng: &mut UniformRandomGen, x: f32, y: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, offset: f32, seed: u32) -> f32;
 
-pub fn fractal_noise_mul_3d<F: Fn(&mut UniformRandomGen, f32, f32, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    y: f32,
-    z: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    offset: f32,
-    seed: u32,
-) -> f32;
+pub fn fractal_noise_mul_3d<F: Fn(&mut UniformRandomGen, f32, f32, f32, u32) -> f32>(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, offset: f32, seed: u32) -> f32;
 
-pub fn fractal_noise_mul_4d<F: Fn(&mut UniformRandomGen, f32, f32, f32, f32, u32) -> f32>(
-    rng: &mut UniformRandomGen,
-    x: f32,
-    y: f32,
-    z: f32,
-    t: f32,
-    noise_func: F,
-    octaves: i32,
-    freq_falloff: f32,
-    lacunarity: f32,
-    offset: f32,
-    seed: u32,
-) -> f32;
+pub fn fractal_noise_mul_4d<F: Fn(&mut UniformRandomGen, f32, f32, f32, f32, u32) -> f32>(rng: &mut UniformRandomGen, x: f32, y: f32, z: f32, t: f32, noise_func: F, octaves: i32, freq_falloff: f32, lacunarity: f32, offset: f32, seed: u32) -> f32;
 ```
